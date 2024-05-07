@@ -1,15 +1,5 @@
-class Producto{
-    constructor(name, id, type, price, stock, description){
-        this.name = name;
-        this.id = id;
-        this.type = type;
-        this.price = price;
-        this.stock = stock;
-        this.description = description;
-    }
-};
 
-const productosBase = [
+const productos = [
     {name:"Aceite Sintetico", id:"1001", type:"Lubricantes", price:100000, stock:10, description:"5w-30"},
     {name:"Aceite SemiSintetico", id:"1002", type:"Lubricantes", price:85000, stock:10, description:"10w-40"},
     {name:"Aceite Mineral", id:"1003", type:"Lubricantes", price:65000, stock:10, description:"SAE 40"},
@@ -17,12 +7,6 @@ const productosBase = [
     {name:"Cubierta Auto", id:"3001", type:"Cubiertas", price:150000, stock:10, description:"255/455R17"},
     {name:"Cubierta Auto", id:"3002", type:"Cubiertas", price:140000, stock:10, description:"205/55R16"}
 ];
-
-localStorage.removeItem("productos");
-
-localStorage.setItem("productos", JSON.stringify(productosBase));
-
-const productos = JSON.parse(localStorage.getItem("productos")) || [] ;
 
 let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
@@ -40,7 +24,16 @@ const mostrarTotalCarrito = ()=>{
 };
 
 const agregarCarrito = (objetoCarrito)=>{
-    carrito.push(objetoCarrito);
+    const verificar = carrito.some((elemento)=>{
+            return elemento.id === objetoCarrito.id
+        }
+    );
+    if (verificar){
+        const indice = carrito.findIndex((elemento)=> elemento.id === objetoCarrito.id)
+        carrito[indice].quantity = parseInt(carrito[indice].quantity) + parseInt(objetoCarrito.quantity)
+    } else{
+        carrito.push(objetoCarrito);
+    }
     mostrarTotalCarrito();
 };
 
