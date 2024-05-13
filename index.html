@@ -29,7 +29,10 @@
     </header>
     <main class="main-custom">
         <div class="d-grid gap-2">
-            <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Carrito</button>
+            <button class="btn btn-primary" id="btnCarrito" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                Carrito  
+                <span class="badge" id="contadorCart"></span>
+            </button>
         </div>
 
         <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
@@ -52,21 +55,23 @@
             </div>
         </div>
 
-        <div id="filters-div">
-            <h3>Productos</h3>
-            <form>
-                <select class="form-select" aria-label="Default select example" id="tipoProducto">
-                    <option selected value="0">Todo</option>
-                    <option value="Lubricantes">Lubricantes</option>
-                    <option value="Filtros">Filtros</option>
-                    <option value="Cubiertas">Cubiertas</option>
-                </select>
-            </form>
-        </div>
+        <div id="products">
+            <div id="filters-div">
+                <h3>Productos</h3>
+                <form>
+                    <select class="form-select" aria-label="Default select example" id="tipoProducto">
+                        <option selected value="0">Todo</option>
+                        <option value="Lubricantes">Lubricantes</option>
+                        <option value="Filtros">Filtros</option>
+                        <option value="Cubiertas">Cubiertas</option>
+                    </select>
+                </form>
+            </div>
 
-        <div class="container">
-            <div class="row" id="contenedorProductos">
+            <div class="container">
+                <div class="row" id="contenedorProductos">
 
+                </div>
             </div>
         </div>
         

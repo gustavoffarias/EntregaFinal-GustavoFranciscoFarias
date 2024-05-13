@@ -20,7 +20,7 @@ body {
     padding-left: 1%;
 }
 
-  header {
+header {
     width: 100%;
     background-color: black;
     color: white;
@@ -29,6 +29,17 @@ body {
     justify-content: space-between;
     padding: 1%;
     margin: 1%;
+}
+
+#contadorCart {
+    font-size: .87em;
+    font-weight: bold;
+    padding-left: .35em;
+    padding-right: .35em;
+    padding-top: .35em;
+    padding-bottom: .25em;
+    background-color: red;
+    border-radius: 50%;
 }
 
 .menuCarrito {
@@ -48,9 +59,13 @@ body {
     margin-top: 5%;
 }
 
-#filters-div {
+#products {
+    display: flex;
     margin-top: 1%;
-    margin-bottom: 1%;
+}
+
+#filters-div {
+    width: 25%;
 }
 
 #contenedorProductos {

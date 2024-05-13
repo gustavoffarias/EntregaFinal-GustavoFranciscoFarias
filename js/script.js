@@ -8,7 +8,18 @@ const productos = [
     {name:"Cubierta Auto", id:"3002", type:"Cubiertas", price:140000, stock:10, description:"205/55R16"}
 ];
 
+
 let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+
+let contadorProdsCart = JSON.parse(localStorage.getItem("contadorProdsCart"));
+
+
+const contCart = () => {
+    let contadorCart = document.querySelector("#contadorCart");
+    contadorCart.innerHTML = `
+    <span class="badge" id="contadorCart">${contadorProdsCart}</span>
+    `;
+};
 
 const totalCarrito = ()=>{
     let total = carrito.reduce((acumulador, {price, quantity})=>{
@@ -37,6 +48,15 @@ const agregarCarrito = (objetoCarrito)=>{
     mostrarTotalCarrito();
 };
 
+function contadorProdsCarrito(prods) {
+    let contador = 0;
+    for (const entrada of prods) {
+      contador += 1;
+    }
+    return contador;
+
+  };
+
 const mostrarCarrito = ()=>{
     const listaCarrito = document.getElementById("listaCarrito")
     listaCarrito.innerHTML=""
@@ -52,10 +72,18 @@ const mostrarCarrito = ()=>{
                             }
                         }
                     )
+
                     let carritoString = JSON.stringify(carrito);
                     localStorage.setItem("carrito", carritoString);
                     mostrarCarrito();
                     mostrarTotalCarrito();
+                                        
+                    let contadorCart = document.querySelector("#contadorCart");
+                    contadorCart.innerHTML = `
+                    <span class="badge" id="contadorCart">${contadorProdsCarrito(carrito)}</span>
+                    `;
+
+                    localStorage.setItem("contadorProdsCart", contadorProdsCarrito(carrito));
                 }
             )
             let carritoString = JSON.stringify(carrito);
@@ -69,7 +97,6 @@ const borrarCarrito = ()=>{
     let carritoString = JSON.stringify(carrito);
     localStorage.setItem("carrito", carritoString);
     mostrarCarrito();
-
 }
 
 const mostrarProductos = (arrayRendProds)=>{
@@ -106,8 +133,16 @@ const mostrarProductos = (arrayRendProds)=>{
                         const form = document.getElementById(`form${id}`);
                         form.reset();
                     };
+
+                    let contadorCart = document.querySelector("#contadorCart");
+                    contadorCart.innerHTML = `
+                    <span class="badge" id="contadorCart">${contadorProdsCarrito(carrito)}</span>
+                    `;
+
+                    localStorage.setItem("contadorProdsCart", contadorProdsCarrito(carrito));
                 }
             );
+
         }
     );
 };
@@ -142,7 +177,11 @@ selectorTipo.onchange = (evt)=>{
     };
 };
 
+
+  
+
 const ecomm = ()=>{
+    contCart();
     mostrarProductos(productos);
     mostrarCarrito();
     mostrarTotalCarrito();
