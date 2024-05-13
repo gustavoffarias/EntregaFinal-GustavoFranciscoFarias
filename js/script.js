@@ -173,6 +173,20 @@ compraFinal.addEventListener("submit",(event)=>{
     }
 );
 
+let botonFiltroPrecio = document.getElementById("botonFiltroPrecio");
+botonFiltroPrecio.addEventListener("click", (evento)=>{
+        evento.preventDefault();
+        const precioMin = Number(document.getElementById('precioMin').value);
+        const precioMax = Number(document.getElementById('precioMax').value);
+        const rangoPrecio = [precioMin, precioMax];
+        if(precioMin === 0 && precioMax === 0) {
+            mostrarProductos(productos);
+        }else{
+            mostrarProductos(productos.filter(prod=>prod.price >= precioMin && prod.price <= precioMax));
+        }
+    }
+);
+
 const selectorTipo = document.getElementById("tipoProducto");
 
 selectorTipo.onchange = (evt)=>{

@@ -69,9 +69,11 @@
                 <h3>Precios</h3>
                 <form>
                     <form id="formCompraFinal">
-                        <input required type="text" placeholder="Minimo" name="min">
-                        <input required type="text" placeholder="Maximo" name="max">
-                        <input type="submit" value="Filtrar" class="btn btn-primary" id="botonFiltroPrecio">
+                        <label for="minimo">Minimo:</label>
+                        <input required type="text" value="0" placeholder="Minimo" name="min" id="precioMin">
+                        <label for="maximo">Maximo:</label>
+                        <input required type="text" value="0" placeholder="Maximo" name="max" id="precioMax">
+                        <button type="submit" type="button" class="btn btn-primary" id="botonFiltroPrecio">Filtrar</button>
                     </form>
                 </form>
             </div>

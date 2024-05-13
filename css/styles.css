@@ -68,6 +68,18 @@ header {
     width: 25%;
 }
 
+#filters-div form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: stretch;
+    margin-bottom: 5%;
+}
+
+#filters-div form button{
+    margin-top: 5%;
+}
+
 #contenedorProductos {
     display: flex;
     justify-content: center;
@@ -79,6 +91,6 @@ header {
 }
 
 .formAgregar input {
-margin-top: 5px;
-margin-bottom: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
 }
