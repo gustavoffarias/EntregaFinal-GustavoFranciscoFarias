@@ -151,6 +151,13 @@ const finalizarCompra = (event)=>{
     borrarCarrito();
     let mensaje = document.getElementById("carritoTotal");
     mensaje.innerHTML = "Muchas gracias por su compra, los esperamos pronto";
+
+    let contadorCart = document.querySelector("#contadorCart");
+    contadorCart.innerHTML = `
+    <span class="badge" id="contadorCart">${contadorProdsCarrito(carrito)}</span>
+    `;
+
+    localStorage.setItem("contadorProdsCart", contadorProdsCarrito(carrito));
 };
 
 const compraFinal = document.getElementById("formCompraFinal");
@@ -176,9 +183,6 @@ selectorTipo.onchange = (evt)=>{
         mostrarProductos(productos.filter(prod=>prod.type === tipoSeleccionado));
     };
 };
-
-
-  
 
 const ecomm = ()=>{
     contCart();

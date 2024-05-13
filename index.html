@@ -50,7 +50,7 @@
                     <input required type="email" placeholder="" name="email">
                     <label for="telefono">Telefono:</label>
                     <input required type="number" placeholder="" name="telefono">
-                    <input type="submit" value="Finalizar Compra" class="btn btn-primary" id="botonCompraFinal">
+                    <button type="submit" type="button" class="btn btn-primary" id="botonCompraFinal">Finalizar Compra</button>
                 </form>
             </div>
         </div>
@@ -66,7 +66,16 @@
                         <option value="Cubiertas">Cubiertas</option>
                     </select>
                 </form>
+                <h3>Precios</h3>
+                <form>
+                    <form id="formCompraFinal">
+                        <input required type="text" placeholder="Minimo" name="min">
+                        <input required type="text" placeholder="Maximo" name="max">
+                        <input type="submit" value="Filtrar" class="btn btn-primary" id="botonFiltroPrecio">
+                    </form>
+                </form>
             </div>
+
 
             <div class="container">
                 <div class="row" id="contenedorProductos">
