@@ -62,7 +62,15 @@ const mostrarCarrito = ()=>{
     listaCarrito.innerHTML=""
     carrito.forEach(({name, price, quantity, id}) =>{
             let elementoLista = document.createElement("li");
-            elementoLista.innerHTML=`Producto:${name} <br> Precio: ${price} <br> Cant.:${quantity} <button type="button" class=" btn-custom btn btn-danger" style="--bs-btn-padding-y: .1rem; --bs-btn-padding-x: .2rem; --bs-btn-font-size: .65rem;" id="eliminarCarrito${id}">X</button>`;
+            elementoLista.innerHTML=`
+                <img src="./img/${name+id}.png" style="width: 25%;" alt="${name}"> 
+                <div>
+                    Producto:${name} <br> 
+                    Precio: ${price} <br> 
+                    Cant.:${quantity} 
+                    <button type="button" class=" btn-custom btn btn-danger" style="--bs-btn-padding-y: .1rem; --bs-btn-padding-x: .2rem; --bs-btn-font-size: .65rem;" id="eliminarCarrito${id}">X</button>
+                </div>
+            `;
             listaCarrito.appendChild(elementoLista);
             const botonBorrar = document.getElementById(`eliminarCarrito${id}`);
             botonBorrar.addEventListener("click",()=>{

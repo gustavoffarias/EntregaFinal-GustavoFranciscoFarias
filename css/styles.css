@@ -42,12 +42,32 @@ header {
     border-radius: 50%;
 }
 
+#offcanvasRight {
+    overflow-y: auto;
+}
+
 .menuCarrito {
-    padding: 5%;
+    padding: 3%;
+}
+
+.menuCarrito ul {
+    padding: 0;
 }
 
 .menuCarrito ul li{
-    text-decoration: none;
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+    margin-top: 1%;
+}
+
+.menuCarrito ul li div {
+    margin-left: 3%;
+}
+
+.menuCarrito p {
+    text-align: center;
+    font-size:x-large;
 }
 
 .menuCarrito #formCompraFinal {
