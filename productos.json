@@ -1,0 +1,58 @@
+[
+    {
+        "name":"Aceite Sintetico", 
+        "id":"1001", 
+        "type":"Lubricantes", 
+        "price":100000, 
+        "stock":10, 
+        "description":"5w-30"
+    },
+    {
+        "name":"Aceite SemiSintetico", 
+        "id":"1002", 
+        "type":"Lubricantes", 
+        "price":85000, 
+        "stock":10, 
+        "description":"10w-40"
+    },
+    {
+        "name":"Aceite Mineral", 
+        "id":"1003", 
+        "type":"Lubricantes", 
+        "price":65000, 
+        "stock":10, 
+        "description":"SAE 40"
+    },
+    {
+        "name":"Filtro de Aire Auto", 
+        "id":"2001", 
+        "type":"Filtros", 
+        "price":10000, 
+        "stock":90, 
+        "description":"CA11222"
+    },
+    {
+        "name":"Filtro de Combustible Auto", 
+        "id":"2002", 
+        "type":"Filtros", 
+        "price":9000, 
+        "stock":90, 
+        "description":"CH11222"
+    },
+    {
+        "name":"Cubierta Auto", 
+        "id":"3001", 
+        "type":"Cubiertas", 
+        "price":150000, 
+        "stock":40, 
+        "description":"255/455R17"
+    },
+    {
+        "name":"Cubierta Auto", 
+        "id":"3002", 
+        "type":"Cubiertas", 
+        "price":140000, 
+        "stock":40, 
+        "description":"205/55R16"
+    }
+]

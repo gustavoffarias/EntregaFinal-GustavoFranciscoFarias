@@ -1,27 +1,39 @@
+class Producto{
+    constructor(name, id, type, price, stock, description){
+        this.name = name;
+        this.id = id;
+        this.type = type;
+        this.price = price;
+        this.stock = stock;
+        this.description = description;
+    }
+}
 
-const productos = [
-    {name:"Aceite Sintetico", id:"1001", type:"Lubricantes", price:100000, stock:10, description:"5w-30"},
-    {name:"Aceite SemiSintetico", id:"1002", type:"Lubricantes", price:85000, stock:10, description:"10w-40"},
-    {name:"Aceite Mineral", id:"1003", type:"Lubricantes", price:65000, stock:10, description:"SAE 40"},
-    {name:"Filtro de Aire Auto", id:"2001", type:"Filtros", price:10000, stock:10, description:"CA11222"},
-    {name:"Cubierta Auto", id:"3001", type:"Cubiertas", price:150000, stock:10, description:"255/455R17"},
-    {name:"Cubierta Auto", id:"3002", type:"Cubiertas", price:140000, stock:10, description:"205/55R16"}
-];
-
-
+localStorage.removeItem("productos");
+const productos = JSON.parse(localStorage.getItem("productos")) || [] 
 let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-
 let contadorProdsCart = JSON.parse(localStorage.getItem("contadorProdsCart"));
 
+const agregarProducto = ({name, id, type, price, stock, description})=>{
+    if(productos.some(prod=>prod.id===id)){
+        console.warn("Ya existe un producto con ese id")
+    } else {
+        const productoNuevo = new Producto(name, id, type, price, stock, description)
+        productos.push(productoNuevo)
+        localStorage.setItem('productos', JSON.stringify(productos))
+    }
+}
 
 const contCart = () => {
-    let contadorCart = document.querySelector("#contadorCart");
-    contadorCart.innerHTML = `
-    <span class="badge" id="contadorCart">${contadorProdsCart}</span>
+    let contadorCarrito = document.querySelector("#contadorCarrito");
+    contadorCarrito.innerHTML = `
+    <span class="badge" id="contadorCarrito">${contadorProdsCart}</span>
     `;
 };
 
 const totalCarrito = ()=>{
+    //calcula la sumatoria de cantidad por precio de los productos
+    //con reduce obtenemos el total en base a price y quantity acumulados en "acumulador"
     let total = carrito.reduce((acumulador, {price, quantity})=>{
             return acumulador + (price*quantity);
         }, 0
@@ -30,25 +42,30 @@ const totalCarrito = ()=>{
 };
 
 const mostrarTotalCarrito = ()=>{
+    //muestra el total del carrito, sumatoria de cantidad por precio de los productos
     const carritoTotal = document.getElementById("carritoTotal");
-    carritoTotal.innerHTML=`Total Carrito: $ ${totalCarrito()}`;
+    carritoTotal.innerHTML=`Total Carrito: $ ${new Intl.NumberFormat("de-DE").format(totalCarrito())}`;
 };
 
 const agregarCarrito = (objetoCarrito)=>{
+    //verificamos que al querer agregar un producto, este ya exista o no en el carrito
     const verificar = carrito.some((elemento)=>{
             return elemento.id === objetoCarrito.id
         }
     );
     if (verificar){
+        //si es true, es decir, si existe el producto, acumulamos la cantidad
         const indice = carrito.findIndex((elemento)=> elemento.id === objetoCarrito.id)
         carrito[indice].quantity = parseInt(carrito[indice].quantity) + parseInt(objetoCarrito.quantity)
     } else{
+        //si es false, es decir, no existe el producto, hacemos un push para agregarlo al carrito
         carrito.push(objetoCarrito);
     }
     mostrarTotalCarrito();
 };
 
 function contadorProdsCarrito(prods) {
+    //cuenta la cantidad de productos en el carrito por id, no por quantity sino por producto
     let contador = 0;
     for (const entrada of prods) {
       contador += 1;
@@ -65,9 +82,9 @@ const mostrarCarrito = ()=>{
             elementoLista.innerHTML=`
                 <img src="./img/${name+id}.png" style="width: 25%;" alt="${name}"> 
                 <div>
-                    Producto:${name} <br> 
-                    Precio: ${price} <br> 
-                    Cant.:${quantity} 
+                    Producto: ${name} <br> 
+                    Precio: $${new Intl.NumberFormat("de-DE").format(price)} <br> 
+                    Cant.: ${quantity} 
                     <button type="button" class=" btn-custom btn btn-danger" style="--bs-btn-padding-y: .1rem; --bs-btn-padding-x: .2rem; --bs-btn-font-size: .65rem;" id="eliminarCarrito${id}">X</button>
                 </div>
             `;
@@ -86,9 +103,9 @@ const mostrarCarrito = ()=>{
                     mostrarCarrito();
                     mostrarTotalCarrito();
                                         
-                    let contadorCart = document.querySelector("#contadorCart");
-                    contadorCart.innerHTML = `
-                    <span class="badge" id="contadorCart">${contadorProdsCarrito(carrito)}</span>
+                    let contadorCarrito = document.querySelector("#contadorCarrito");
+                    contadorCarrito.innerHTML = `
+                    <span class="badge" id="contadorCarrito">${contadorProdsCarrito(carrito)}</span>
                     `;
 
                     localStorage.setItem("contadorProdsCart", contadorProdsCarrito(carrito));
@@ -111,48 +128,114 @@ const mostrarProductos = (arrayRendProds)=>{
     const contenedorProductos = document.getElementById("contenedorProductos");
     contenedorProductos.innerHTML = "";
     arrayRendProds.forEach(({name, id, type, price, stock, description})=>{
-            const prodCard = document.createElement("div");
-            prodCard.classList.add("col-sm-");
-            prodCard.classList.add("card");
-            prodCard.style = "width: 270px; margin: 1px;";
-            prodCard.id = id;
-            prodCard.innerHTML = `
+            const cartaProducto = document.createElement("div");
+            cartaProducto.classList.add("col-sm-");
+            cartaProducto.classList.add("card");
+            cartaProducto.style = "width: 270px; margin: 1px;";
+            cartaProducto.id = id;
+            cartaProducto.innerHTML = `
                     <img src="./img/${name+id}.png" class="card-img-top" alt="${name}">
                     <div class="card-body">
                         <h5 class="card-title">${name}</h5>
                         <h6>${type}</h6>
-                        <p class="card-text">${description}</p>
-                        <span>Stock: ${stock}</span>
-                        <span>$ ${price}</span>
-                        <form class="formAgregar" id="form${id}">
-                            <label for="contador${id}">Cantidad</label>
-                            <input type="number" placeholder="0" id="contador${id}">
-                            <button class="btn btn-primary" id="botonProd${id}">Agregar</button>
-                        </form>
+                        <span>${description}</span><br>
+                        <span>Precio: $${new Intl.NumberFormat("de-DE").format(price)}</span><br>
+                        <button class="btn btn-primary" id="botonComprar${id}" style="width: 100%; margin-top:5%;" >Comprar</button>
+
                     </div>`;
-            contenedorProductos.appendChild(prodCard);
-            const btn = document.getElementById(`botonProd${id}`);
-                btn.addEventListener("click",(evento)=>{
-                    evento.preventDefault();
-                    const contadorQuantity = Number(document.getElementById(`contador${id}`).value);
-                    if(contadorQuantity>0){
-                        agregarCarrito({name, id, type, price, stock, description, quantity:contadorQuantity});
-                        mostrarCarrito();
-                        const form = document.getElementById(`form${id}`);
-                        form.reset();
-                    };
+            contenedorProductos.appendChild(cartaProducto);
+            const btnComprar = document.getElementById(`botonComprar${id}`);
+                btnComprar.addEventListener("click",(evento)=>{
+                        evento.preventDefault();
+                        Swal.fire({
+                            title: "<p>Elegí los detalles del producto que seleccionaste</p>",
+                            html: `
+                                <span>Precio: $${new Intl.NumberFormat("de-DE").format(price)}</span><br>
+                                <span>Stock: ${stock}</span><br>
 
-                    let contadorCart = document.querySelector("#contadorCart");
-                    contadorCart.innerHTML = `
-                    <span class="badge" id="contadorCart">${contadorProdsCarrito(carrito)}</span>
-                    `;
+                                <form class="formAgregar" id="formAgregar${id}">
+                                    <label for="contador${id}">Cantidad</label>
+                                    <input type="number" placeholder="0" id="contadorAgregar${id}">
+                                    <button class="btn btn-primary" id="botonProdAgregar${id}" type="button">Agregar</button>
+                                    <button class="btn btn-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" style="margin-top:2%;">Ver/Cerrar Carrito</button>
+   
+                                </form>
+                            `,
+                            showCloseButton: true,
+                            showConfirmButton: false,
+                        });
 
-                    localStorage.setItem("contadorProdsCart", contadorProdsCarrito(carrito));
+                        const cantProdAgregando = ()=>{
+                            const verificar = carrito.find((elemento)=>{
+                                    return elemento.id === id
+                                }
+                            );
+                            if (verificar){
+                                let cantidadProdAgregando = verificar.quantity
+                                return cantidadProdAgregando;
+                            } else{
+                                let cantidadProdAgregando = 0;
+                                return cantidadProdAgregando;
+                            }
+                        
+                        };
+
+                        let controlCantProdAgregando = cantProdAgregando(carrito);
+
+                        const btnAgregar = document.getElementById(`botonProdAgregar${id}`);
+                        btnAgregar.addEventListener("click",(eventoAgregar)=>{
+                            eventoAgregar.preventDefault();
+                            const contadorQuantity = Number(document.getElementById(`contadorAgregar${id}`).value);
+
+                            if(contadorQuantity<=stock && controlCantProdAgregando<=stock
+                            ){
+                                if(contadorQuantity>0){
+                                    agregarCarrito({name, id, type, price, stock, description, quantity:contadorQuantity});
+                                    mostrarCarrito();
+                                    const form = document.getElementById(`formAgregar${id}`);
+                                    form.reset();
+                                };    
+                            } else {
+                                Swal.fire({
+                                    icon: "error",
+                                    confirmButtonText: 'No tenemos sufiente stock para la cantidad deseada'
+                                  });
+                            }
+
+                            let contadorCarrito = document.querySelector("#contadorCarrito");
+                            contadorCarrito.innerHTML = `
+                            <span class="badge" id="contadorCarrito">${contadorProdsCarrito(carrito)}</span>
+                            `;
+          
+                            localStorage.setItem("contadorProdsCart", contadorProdsCarrito(carrito));
+                        }
+                    );
+                }
+            );
+        }
+    );
+};
+
+const productosCargados = async () => {
+    if(productos.length === 0){
+        try {
+            const urlProductosUno = "/JavaScript/EntregaFinal-FariasGustavo/productos.json";
+            const urlProductosDos = "./productos.json";
+            const productosBasePura = await fetch(urlProductosDos);
+            const productosBase = await productosBasePura.json();
+            productosBase.forEach(prod => {
+                    agregarProducto(prod);
                 }
             );
 
+        } catch(err) {
+            console.error("se produjo un error obteniendo los productos");
+        } finally {
+            mostrarProductos(productos);
         }
-    );
+    } else {
+        mostrarProductos(productos);
+    };
 };
 
 const finalizarCompra = (event)=>{
@@ -160,9 +243,9 @@ const finalizarCompra = (event)=>{
     let mensaje = document.getElementById("carritoTotal");
     mensaje.innerHTML = "Muchas gracias por su compra, los esperamos pronto";
 
-    let contadorCart = document.querySelector("#contadorCart");
-    contadorCart.innerHTML = `
-    <span class="badge" id="contadorCart">${contadorProdsCarrito(carrito)}</span>
+    let contadorCarrito = document.querySelector("#contadorCarrito");
+    contadorCarrito.innerHTML = `
+    <span class="badge" id="contadorCarrito">${contadorProdsCarrito(carrito)}</span>
     `;
 
     localStorage.setItem("contadorProdsCart", contadorProdsCarrito(carrito));
@@ -208,7 +291,7 @@ selectorTipo.onchange = (evt)=>{
 
 const ecomm = ()=>{
     contCart();
-    mostrarProductos(productos);
+    productosCargados();
     mostrarCarrito();
     mostrarTotalCarrito();
 };
