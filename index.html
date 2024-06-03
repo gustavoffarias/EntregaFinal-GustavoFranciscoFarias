@@ -46,13 +46,13 @@
             <div class="menuCarrito">
                 <ul id="listaCarrito"></ul>
                 <p id="carritoTotal"></p>
-                <form id="formCompraFinal">
-                    <label for="nombre">Nombre:</label>
-                    <input required type="text" placeholder="" name="nombre">
-                    <label for="email">Email:</label>
-                    <input required type="email" placeholder="" name="email">
-                    <label for="telefono">Telefono:</label>
-                    <input required type="number" placeholder="" name="telefono">
+                <form id="formCompraFinal" class="needs-validation">
+                    <label for="nombre"  class="form-label">Nombre:</label>
+                    <input class="form-control" id="formCompraFinalNombre" type="text" placeholder="" name="nombre" required>
+                    <label for="email" class="form-label">Email:</label>
+                    <input class="form-control" type="email" placeholder="" name="email" required>
+                    <label for="telefono" class="form-label">Telefono:</label>
+                    <input class="form-control" type="number" placeholder="" name="telefono" required>
                     <button type="submit" type="button" class="btn btn-primary" id="botonCompraFinal">Finalizar Compra</button>
                 </form>
             </div>

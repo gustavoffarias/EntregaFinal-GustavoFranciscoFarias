@@ -145,50 +145,50 @@ const mostrarProductos = (arrayRendProds)=>{
                     </div>`;
             contenedorProductos.appendChild(cartaProducto);
             const btnComprar = document.getElementById(`botonComprar${id}`);
-                btnComprar.addEventListener("click",(evento)=>{
-                        evento.preventDefault();
-                        Swal.fire({
-                            title: "<p>Elegí los detalles del producto que seleccionaste</p>",
-                            html: `
-                                <span>Precio: $${new Intl.NumberFormat("de-DE").format(price)}</span><br>
-                                <span>Stock: ${stock}</span><br>
+            btnComprar.addEventListener("click",(evento)=>{
+                    evento.preventDefault();
+                    const swalWithBootstrapButtons = Swal.mixin({
+                        customClass: {
+                          confirmButton: "btn btn-primary btn-lg",
+                        },
+                        buttonsStyling: false
+                    });
+                    swalWithBootstrapButtons.fire({
+                        title: "<p>Elegí los detalles del producto que seleccionaste</p>",
+                        html: `
+                            <span>Precio: $${new Intl.NumberFormat("de-DE").format(price)}</span><br>
+                            <span>Stock: ${stock}</span><br>
 
-                                <form class="formAgregar" id="formAgregar${id}">
-                                    <label for="contador${id}">Cantidad</label>
-                                    <input type="number" placeholder="0" id="contadorAgregar${id}">
-                                    <button class="btn btn-primary" id="botonProdAgregar${id}" type="button">Agregar</button>
-                                    <button class="btn btn-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" style="margin-top:2%;">Ver/Cerrar Carrito</button>
-   
-                                </form>
-                            `,
-                            showCloseButton: true,
-                            showConfirmButton: false,
-                        });
-
-                        const cantProdAgregando = ()=>{
-                            const verificar = carrito.find((elemento)=>{
-                                    return elemento.id === id
+                            <form class="formAgregar" id="formAgregar${id}">
+                                <label for="contador${id}">Cantidad</label>
+                                <input type="number" class="form-control" placeholder="0" id="contadorAgregar${id}">
+                            </form>
+                        `,
+                        showCloseButton: true,
+                        showConfirmButton: true,
+                        confirmButtonText: "Agregar al carrito  "
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const cantProdAgregando = ()=>{
+                                const verificar = carrito.find((elemento)=>{
+                                        return elemento.id === id
+                                    }
+                                );
+                                if (verificar){
+                                    let cantidadProdAgregando = verificar.quantity
+                                    return cantidadProdAgregando;
+                                } else{
+                                    let cantidadProdAgregando = 0;
+                                    return cantidadProdAgregando;
                                 }
-                            );
-                            if (verificar){
-                                let cantidadProdAgregando = verificar.quantity
-                                return cantidadProdAgregando;
-                            } else{
-                                let cantidadProdAgregando = 0;
-                                return cantidadProdAgregando;
-                            }
-                        
-                        };
+                                
+                            };
+        
+                            let controlCantProdAgregando = cantProdAgregando(carrito);
 
-                        let controlCantProdAgregando = cantProdAgregando(carrito);
-
-                        const btnAgregar = document.getElementById(`botonProdAgregar${id}`);
-                        btnAgregar.addEventListener("click",(eventoAgregar)=>{
-                            eventoAgregar.preventDefault();
                             const contadorQuantity = Number(document.getElementById(`contadorAgregar${id}`).value);
 
-                            if(contadorQuantity<=stock && controlCantProdAgregando<=stock
-                            ){
+                            if(contadorQuantity<=stock && controlCantProdAgregando<=stock){
                                 if(contadorQuantity>0){
                                     agregarCarrito({name, id, type, price, stock, description, quantity:contadorQuantity});
                                     mostrarCarrito();
@@ -196,20 +196,26 @@ const mostrarProductos = (arrayRendProds)=>{
                                     form.reset();
                                 };    
                             } else {
-                                Swal.fire({
+                                const swalWithBootstrapButtonsError = Swal.mixin({
+                                    customClass: {
+                                      confirmButton: "btn btn-outline-danger",
+                                    },
+                                    buttonsStyling: false
+                                });
+                                swalWithBootstrapButtonsError.fire({
                                     icon: "error",
                                     confirmButtonText: 'No tenemos sufiente stock para la cantidad deseada'
-                                  });
+                                });
                             }
-
+    
                             let contadorCarrito = document.querySelector("#contadorCarrito");
                             contadorCarrito.innerHTML = `
-                            <span class="badge" id="contadorCarrito">${contadorProdsCarrito(carrito)}</span>
+                                <span class="badge" id="contadorCarrito">${contadorProdsCarrito(carrito)}</span>
                             `;
-          
+              
                             localStorage.setItem("contadorProdsCart", contadorProdsCarrito(carrito));
                         }
-                    );
+                    });
                 }
             );
         }
@@ -219,15 +225,13 @@ const mostrarProductos = (arrayRendProds)=>{
 const productosCargados = async () => {
     if(productos.length === 0){
         try {
-            const urlProductosUno = "/JavaScript/EntregaFinal-FariasGustavo/productos.json";
-            const urlProductosDos = "./productos.json";
-            const productosBasePura = await fetch(urlProductosDos);
+            const urlProductos = "./productos.json";
+            const productosBasePura = await fetch(urlProductos);
             const productosBase = await productosBasePura.json();
             productosBase.forEach(prod => {
                     agregarProducto(prod);
                 }
             );
-
         } catch(err) {
             console.error("se produjo un error obteniendo los productos");
         } finally {
@@ -241,7 +245,10 @@ const productosCargados = async () => {
 const finalizarCompra = (event)=>{
     borrarCarrito();
     let mensaje = document.getElementById("carritoTotal");
-    mensaje.innerHTML = "Muchas gracias por su compra, los esperamos pronto";
+    let nombreForm = document.getElementById("formCompraFinalNombre").value;
+    mensaje.innerHTML = "Muchas gracias "+nombreForm+" por tu compra, los esperamos pronto";
+
+    document.getElementById("formCompraFinal").reset();
 
     let contadorCarrito = document.querySelector("#contadorCarrito");
     contadorCarrito.innerHTML = `
